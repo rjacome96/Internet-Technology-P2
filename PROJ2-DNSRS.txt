@@ -1,0 +1,4 @@
+xyz.gov 123.43.5.6 A
+TLDS1.edu ilab.cs.rutgers.edu NS
+TLDS1.com grep.cs.rutgers.edu NS
+google.com 43.4.2.5 A
