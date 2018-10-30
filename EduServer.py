@@ -32,13 +32,22 @@ def EduServer():
     port = 6500
     serverBinding = ('', port)
     rootServerSocket.bind(serverBinding)
+    print("[EDU]: Socket is binded to port: ", port)
 
     rootServerSocket.listen(1)
-
+    print("[EDU]: Listening for one on port 6500...")
     rootConnection = rootServerSocket.accept()
 
     rootSocket = rootConnection[0]
 
+     while True:
+        rootServerInfo = rootSocket.recv(1024).decode('utf-8')
+        
+        print("[EDU]: Received from root server: ", rootServerInfo)
+        
+        rootSocket.send("Result from Server: ".encode('utf-8'))
+        
+        break
     # Debug statement to be deleted
     print(rootSocket)
 
