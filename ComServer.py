@@ -11,7 +11,7 @@ def ComServer():
         
     com_Dict = {}
         
-    with open("PROJ2-DNSEDU.txt", "r") as dnsTableFile:
+    with open("PROJ2-DNSCOM.txt", "r") as dnsTableFile:
         for fieldLine in dnsTableFile:
             dictKey = fieldLine.rstrip()
             recordString = dictKey.rsplit()
@@ -40,6 +40,7 @@ def ComServer():
             break
 		
         dataToServer = None
+        print("serverInfo - com: ", serverInfo)
 		
         if serverInfo in com_Dict:
             print("[COM]: Host Found")

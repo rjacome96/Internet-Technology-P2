@@ -54,16 +54,16 @@ def RootServer():
 
     # Connect to .edu server
     eduServerPort = 6500
-    eduServerAddr = aSocket.gethostbyname(eduServerHostName)
-    eduServerConnection = (eduServerAddr, eduServerPort)
-    #eduServerConnection = ('', eduServerPort)
+    eduServerAddr = aSocket.gethostbyname("ilab.cs.rutgers.edu")
+    #eduServerConnection = (eduServerAddr, eduServerPort)
+    eduServerConnection = ('', eduServerPort)
     eduSocketServer.connect(eduServerConnection)
 
     # Connect to .com server
     comServerPort = 7000
-    comServerAddr = aSocket.gethostbyname(comServerHostName)
-    comServerConnection = (comServerAddr, comServerPort)
-    #comServerConnection = ('', comServerPort)
+    comServerAddr = aSocket.gethostbyname("ilab.cs.rutgers.edu")
+    #comServerConnection = (comServerAddr, comServerPort)
+    comServerConnection = ('', comServerPort)
     comSocketServer.connect(comServerConnection)
 
     
@@ -87,24 +87,31 @@ def RootServer():
         dataToClient = None
         dataToEDU = None
         dataToCOM = None
-        typeServer = hostName[-3:]
+        typeServer = clientInfo[-3:]
 		
         if clientInfo in rootServerDict:
             print("[RS]: Host Found")
             flag = rootServerDict[clientInfo][1]
-            dataToClient = clientInfo + " " + rootServerDict[clientInfo][0] + " " + flag
-        if typeServer == "edu":
+            ipAddress = rootServerDict[clientInfo][0]
+            dataToClient = clientInfo + " " + ipAddress + " " + flag
+            #print("[RS]: Sending hostname to client: Root", dataToClient)
+            #clientSocket.send(dataToClient.encode('utf-8'))
+        elif typeServer == "edu":
             print("[RS]: Host not found. Redirect to EDU")
-            flag = "NS"
-            dataToEDU = eduServerHostName + " - " + flag
-            eduSocketServer.send(dataToEDU.encode('utf-8'))
+            #flag = "NS"
+            #dataToEDU = eduServerHostName + " - " + flag
+            eduSocketServer.send(clientInfo.encode('utf-8'))
             dataToClient = eduSocketServer.recv(1024).decode('utf-8')
-        if typeServer == "com":
+            #print("[RS]: Sending hostname to client: EDU", dataToClient)
+            #clientSocket.send(dataToClient.encode('utf-8'))
+        elif typeServer == "com":
             print("[RS]: Host not found. Redirect to COM")
-            flag = "NS"
-            dataToCOM = comServerHostName + " - " + flag
-            comSocketServer.send(dataToCOM.encode('utf-8'))
+            #flag = "NS"
+            #dataToCOM = comServerHostName + " - " + flag
+            comSocketServer.send(clientInfo.encode('utf-8'))
             dataToClient = comSocketServer.recv(1024).decode('utf-8')
+            #print("[RS]: Sending hostname to client, COM: ", dataToClient)
+            #clientSocket.send(dataToClient.encode('utf-8'))
 		
         print("[RS]: Sending hostname to client: ", dataToClient)
         clientSocket.send(dataToClient.encode('utf-8'))

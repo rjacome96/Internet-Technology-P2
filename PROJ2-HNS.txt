@@ -1,1 +1,6 @@
-princeton.edu
+apple.com
+rutgers.edu
+xyz.gov
+TLDS1.edu
+amazon.com
+youtube.com
