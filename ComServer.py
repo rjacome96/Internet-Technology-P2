@@ -8,38 +8,53 @@ def ComServer():
         print("[COM]: Successfully created sockets")
     except aSocket.error as err:
         print("Socket open error: {0} \n".format(err))
-
-    comServerDict = {}
-    with open("PROJ2-DNSCOM.txt", "r") as dnsCOMfile:
-        for fieldLine in dnsCOMfile:
+        
+    com_Dict = {}
+        
+    with open("PROJ2-DNSEDU.txt", "r") as dnsTableFile:
+        for fieldLine in dnsTableFile:
             dictKey = fieldLine.rstrip()
             recordString = dictKey.rsplit()
-            hostname = recordString[0]
+            hostName = recordString[0]
             ipAddress = recordString[1]
             flag = recordString[2].rstrip()
-            comServerDict[hostname] = (ipAddress, flag)
+			
+            com_Dict[hostName] = (ipAddress, flag)
+
     port = 7000
     serverBinding = ('', port)
     rootServerSocket.bind(serverBinding)
     print("[COM]: Socket is binded to port: ", port)
 
     rootServerSocket.listen(1)
-    print("[COM]: Listening for one connection on port 7000...")
-    rootConnection = rootServerSocket.accept()
+    print("[COM]: Listening for one connection on port 5000...")
 
+    rootConnection = rootServerSocket.accept()
+    
     rootSocket = rootConnection[0]
     
     while True:
-        rootServerInfo = rootSocket.recv(1024).decode('utf-8')
-        
-        print("[COM]: Received from root server: ", rootServerInfo)
-        
-        rootSocket.send("Result from Server: ".encode('utf-8'))
-        
-        break
+        serverInfo = rootSocket.recv(1024).decode('utf-8')
+		
+        if not serverInfo: 
+            break
+		
+        dataToServer = None
+		
+        if serverInfo in com_Dict:
+            print("[COM]: Host Found")
+            flag = com_Dict[serverInfo][1]
+            ipAddress = com_Dict[serverInfo][0]
+            dataToServer = serverInfo + " " + ipAddress + " " + flag
+        else:
+            print("[COM]: Host Not Found. Error")
+            dataToServer = serverInfo + " - Error:Host not Found"
+		
+        rootSocket.send(dataToServer.encode('utf-8'))
+
 
     # Debug statement to be deleted
-    print(rootSocket)
+    #print(rootSocket)
 
     time.sleep(15)
 

@@ -39,9 +39,9 @@ def RootServer():
                 typeServer = hostName[-3:] # Takes substring of host name (edu or com)
 
                 if typeServer == "edu":
-                    eduServerHostName = ipAddress # Project PDF shows that the IP field will contain the hostname
+                    eduServerHostName = hostName # Project PDF shows that the IP field will contain the hostname
                 elif typeServer == "com":
-                    comServerHostName = ipAddress # Might need to be edited as well because of reason stated above
+                    comServerHostName = hostName # Might need to be edited as well because of reason stated above
 
             # Key is host name, value is a tuple of IP address and flag
             rootServerDict[hostName] = (ipAddress, flag)
@@ -55,15 +55,15 @@ def RootServer():
     # Connect to .edu server
     eduServerPort = 6500
     eduServerAddr = aSocket.gethostbyname(eduServerHostName)
-    #eduServerConnection = (eduServerAddr, eduServerPort)
-    eduServerConnection = ('', eduServerPort)
+    eduServerConnection = (eduServerAddr, eduServerPort)
+    #eduServerConnection = ('', eduServerPort)
     eduSocketServer.connect(eduServerConnection)
 
     # Connect to .com server
     comServerPort = 7000
     comServerAddr = aSocket.gethostbyname(comServerHostName)
-    #comServerConnection = (comServerAddr, comServerPort)
-    comServerConnection = ('', comServerPort)
+    comServerConnection = (comServerAddr, comServerPort)
+    #comServerConnection = ('', comServerPort)
     comSocketServer.connect(comServerConnection)
 
     
@@ -80,10 +80,36 @@ def RootServer():
         clientInfo = clientSocket.recv(1024).decode('utf-8')
 
         print("[RS]: Recieved from client: ", clientInfo)
+        
+        if not clientInfo:
+            break
+		
+        dataToClient = None
+        dataToEDU = None
+        dataToCOM = None
+        typeServer = hostName[-3:]
+		
+        if clientInfo in rootServerDict:
+            print("[RS]: Host Found")
+            flag = rootServerDict[clientInfo][1]
+            dataToClient = clientInfo + " " + rootServerDict[clientInfo][0] + " " + flag
+        if typeServer == "edu":
+            print("[RS]: Host not found. Redirect to EDU")
+            flag = "NS"
+            dataToEDU = eduServerHostName + " - " + flag
+            eduSocketServer.send(dataToEDU.encode('utf-8'))
+            dataToClient = eduSocketServer.recv(1024).decode('utf-8')
+        if typeServer == "com":
+            print("[RS]: Host not found. Redirect to COM")
+            flag = "NS"
+            dataToCOM = comServerHostName + " - " + flag
+            comSocketServer.send(dataToCOM.encode('utf-8'))
+            dataToClient = comSocketServer.recv(1024).decode('utf-8')
+		
+        print("[RS]: Sending hostname to client: ", dataToClient)
+        clientSocket.send(dataToClient.encode('utf-8'))
 
-        clientSocket.send("Result from Server::".encode('utf-8'))
-
-        break
+        #break
     
     comSocketServer.shutdown(aSocket.SHUT_RDWR)
     eduSocketServer.shutdown(aSocket.SHUT_RDWR)

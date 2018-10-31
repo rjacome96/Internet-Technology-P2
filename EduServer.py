@@ -9,7 +9,7 @@ def EduServer():
         print("Socket open error: {0} \n".format(err))
 
     # Create Dictionary data structure as DNS table
-    comServerDict = {}
+    edu_Dict = {}
     # Read lines from file
     with open("PROJ2-DNSEDU.txt", "r") as dnsTableFile:
         # Populate Dict data structure with hostname as key
@@ -27,7 +27,7 @@ def EduServer():
             flag = recordString[2].rstrip()
 
             # Key is host name, value is a tuple of IP address and flag
-            comServerDict[hostName] = (ipAddress, flag)
+            edu_Dict[hostName] = (ipAddress, flag)
 
     port = 6500
     serverBinding = ('', port)
@@ -35,21 +35,33 @@ def EduServer():
     print("[EDU]: Socket is binded to port: ", port)
 
     rootServerSocket.listen(1)
-    print("[EDU]: Listening for one on port 6500...")
+    print("[EDU]: Listening for one connection on port 5000...")
+
     rootConnection = rootServerSocket.accept()
 
     rootSocket = rootConnection[0]
+    
+    while True:
+        serverInfo = rootSocket.recv(1024).decode('utf-8')
+		
+        if not serverInfo: 
+            break
+		
+        dataToServer = None
+		
+        if serverInfo in edu_Dict:
+            print("[EDU]: Host Found")
+            flag = edu_Dict[serverInfo][1]
+            ipAddress = edu_Dict[serverInfo][0]
+            dataToServer = serverInfo + " " + ipAddress + " " + flag
+        else:
+            print("[COM]: Host Not Found. Error")
+            dataToServer = serverInfo + " - Error:Host not Found"
+		
+        rootSocket.send(dataToServer.encode('utf-8'))
 
-     while True:
-        rootServerInfo = rootSocket.recv(1024).decode('utf-8')
-        
-        print("[EDU]: Received from root server: ", rootServerInfo)
-        
-        rootSocket.send("Result from Server: ".encode('utf-8'))
-        
-        break
     # Debug statement to be deleted
-    print(rootSocket)
+    #print(rootSocket)
 
     time.sleep(15)
 
