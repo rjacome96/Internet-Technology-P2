@@ -4,4 +4,4 @@ nsf.gov 158.246.218.105 A
 happy.com 109.78.231.33 A
 www.test.org 104.209.216.174 A
 TLDS1.edu kill.cs.rutgers.edu NS
-TLDS1.com grep.cs.rutgers.edu NS
+TLDS2.com grep.cs.rutgers.edu NS
