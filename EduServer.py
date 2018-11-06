@@ -15,8 +15,6 @@ def EduServer():
         # Populate Dict data structure with hostname as key
         # And IP address and flags as values
 
-        # Bool variable to help identify server name
-
         for fieldLine in dnsTableFile:
             dictKey = fieldLine.rstrip()
             recordString = dictKey.rsplit()
@@ -55,13 +53,10 @@ def EduServer():
             ipAddress = edu_Dict[serverInfo][0]
             dataToServer = serverInfo + " " + ipAddress + " " + flag
         else:
-            print("[COM]: Host Not Found. Error")
+            print("[EDU]: Host Not Found. Error")
             dataToServer = serverInfo + " - Error:Host not Found"
 		
         rootSocket.send(dataToServer.encode('utf-8'))
-
-    # Debug statement to be deleted
-    #print(rootSocket)
 
     time.sleep(15)
 

@@ -40,7 +40,6 @@ def ComServer():
             break
 		
         dataToServer = None
-        print("serverInfo - com: ", serverInfo)
 		
         if serverInfo in com_Dict:
             print("[COM]: Host Found")
@@ -52,10 +51,6 @@ def ComServer():
             dataToServer = serverInfo + " - Error:Host not Found"
 		
         rootSocket.send(dataToServer.encode('utf-8'))
-
-
-    # Debug statement to be deleted
-    #print(rootSocket)
 
     time.sleep(15)
 
