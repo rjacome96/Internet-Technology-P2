@@ -54,16 +54,16 @@ def RootServer():
 
     # Connect to .edu server
     eduServerPort = 6500
-    eduServerAddr = aSocket.gethostbyname("ilab.cs.rutgers.edu")
-    #eduServerConnection = (eduServerAddr, eduServerPort)
-    eduServerConnection = ('', eduServerPort)
+    eduServerAddr = aSocket.gethostbyname("kill.cs.rutgers.edu")
+    eduServerConnection = (eduServerAddr, eduServerPort)
+    #eduServerConnection = ('', eduServerPort)
     eduSocketServer.connect(eduServerConnection)
 
     # Connect to .com server
     comServerPort = 7000
-    comServerAddr = aSocket.gethostbyname("ilab.cs.rutgers.edu")
-    #comServerConnection = (comServerAddr, comServerPort)
-    comServerConnection = ('', comServerPort)
+    comServerAddr = aSocket.gethostbyname("grep.cs.rutgers.edu")
+    comServerConnection = (comServerAddr, comServerPort)
+    #comServerConnection = ('', comServerPort)
     comSocketServer.connect(comServerConnection)
 
     
