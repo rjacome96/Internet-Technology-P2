@@ -77,7 +77,7 @@ def RootServer():
 
         clientInfo = clientSocket.recv(1024).decode('utf-8')
 
-        print("[RS]: Recieved from client: ", clientInfo)
+        print("[RS]: Recieved from client: {}".format(clientInfo))
         
         if not clientInfo:
             break
