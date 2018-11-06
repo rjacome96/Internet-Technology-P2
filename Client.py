@@ -16,7 +16,7 @@ def connectClient():
     """
 
     rsPort = 6000
-    rsHostName = ""
+    rsHostName = "facade.cs.rutgers.edu"
     rsAddr = aSocket.gethostbyname(rsHostName)
     rsSocketConnection = (rsAddr, rsPort)
 
@@ -27,13 +27,13 @@ def connectClient():
             for hostName in readFile:
                 # Stripping the new line at the end
                 hostName = hostName.rstrip()
-
+                print(hostName)
                 # First contact to RS server
                 rsClientSocket.send(hostName.encode('utf-8'))
 
                 # Get resulting String from server
                 serverResult = rsClientSocket.recv(1024).decode('utf-8')
-
+                print(serverResult)
                 # Write result to file
                 writeFile.write(serverResult + "\n")
 

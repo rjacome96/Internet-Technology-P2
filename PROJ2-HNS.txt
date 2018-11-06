@@ -1,6 +1,8 @@
-apple.com
+place.net
+place.com
+flat.edu
 rutgers.edu
-xyz.gov
-TLDS1.edu
-amazon.com
-youtube.com
+www.princeton.edu
+google.com
+www.test.org
+happy.com
