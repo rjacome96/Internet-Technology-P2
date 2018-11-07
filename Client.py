@@ -9,15 +9,21 @@ def connectClient():
     except aSocket.error as err:
         print("Socket open error: {0} \n".format(err))
 
+    try:
+        rootServerName = sys.argv[1]
+    except IndexError:
+        print("Not enough arguments given")
+        return
+
     rsPort = 6000
-    rsHostName = "facade.cs.rutgers.edu"
+    rsHostName = rootServerName
     #rsHostName = ""
     rsAddr = aSocket.gethostbyname(rsHostName)
     rsSocketConnection = (rsAddr, rsPort)
 
     rsClientSocket.connect(rsSocketConnection)
 
-    hnsFile = sys.argv[1]
+    hnsFile = sys.argv[2]
 
     with open(hnsFile, "r") as readFile:
         with open("RESOLVED.txt", "w") as writeFile:
