@@ -1,5 +1,6 @@
 import socket as aSocket
 import time
+import sys
 
 def RootServer():
 
@@ -12,13 +13,19 @@ def RootServer():
     except aSocket.error as err:
         print("Socket open error: {0} \n".format(err))
 
+    try:
+        dnsFile = sys.argv[3]
+    except IndexError:
+        print("Missing file argument")
+        return
+
     # We will find the servers' host name when we come across 'NS' in the file
     comServerHostName = None
     eduServerHostName = None
     # Create Dictionary data structure as DNS table
     rootServerDict = {}
     # Read lines from file
-    with open("PROJ2-DNSRS.txt", "r") as dnsTableFile:
+    with open(dnsFile, "r") as dnsTableFile:
         # Populate Dict data structure with hostname as key
         # And IP address and flags as values
 
@@ -43,6 +50,13 @@ def RootServer():
 
             # Key is host name, value is a tuple of IP address and flag
             rootServerDict[hostName] = (ipAddress, flag)
+
+    try:
+        comServerHostName = sys.argv[1]
+        eduServerHostName = sys.argv[2]
+    except IndexError:
+        print("Missing arguments")
+        return
 
     # Pick port and bind it to this machine's IP address for Client
     port = 6000

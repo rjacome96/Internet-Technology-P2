@@ -1,4 +1,5 @@
 import socket as aSocket
+import sys
 
 def connectClient():
 
@@ -16,7 +17,9 @@ def connectClient():
 
     rsClientSocket.connect(rsSocketConnection)
 
-    with open("PROJ2-HNS.txt", "r") as readFile:
+    hnsFile = sys.argv[1]
+
+    with open(hnsFile, "r") as readFile:
         with open("RESOLVED.txt", "w") as writeFile:
             for hostName in readFile:
                 # Stripping the new line at the end
